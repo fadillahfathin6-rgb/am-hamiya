@@ -284,7 +284,7 @@
 
             try {
                 // PERHATIKAN: URL mengarah ke /api/proxy (bukan langsung ke sylvatica)
-                const url = `/api/proxy?email=${encodeURIComponent(email)}&apikey=${API_KEY}`;
+                const url = `/proxy?email=${encodeURIComponent(email)}&apikey=${API_KEY}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 
