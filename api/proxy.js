@@ -1,14 +1,12 @@
 export default async function handler(req, res) {
-  const { email, options, apikey } = req.query;
+  const { email, options, url, apikey } = req.query;
 
   if (!email || !apikey) {
     return res.status(400).json({ status: false, message: "Parameter email atau apikey tidak lengkap." });
   }
 
-  // Memastikan parameter options diteruskan dengan benar (default ke 'verif' jika kosong)
-  const optionParam = options || 'verif';
-
-  const targetUrl = `https://sylvatica.my.id/api/tools/alightmotion?email=${encodeURIComponent(email)}&options=${optionParam}&url=&apikey=${apikey}`;
+  // Meneruskan parameter url dan options yang dikirim dari index.html
+  const targetUrl = `https://sylvatica.my.id/api/tools/alightmotion?email=${encodeURIComponent(email)}&options=${options}&url=${encodeURIComponent(url)}&apikey=${apikey}`;
 
   try {
     const response = await fetch(targetUrl, {
