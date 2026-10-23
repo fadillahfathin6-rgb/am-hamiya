@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   // ==========================================
   // KONFIGURASI DATABASE ANDA
   // ==========================================
-  const BIN_ID = "6adb471eac6210605a4bb9ca"; 
+  const BIN_ID = "6adb495fac6210605a4bc070"; 
   const JSONBIN_API_KEY = "$2a$10$bed.4AkorEHtZnnFOiC/4un54RhvFVfhhKVhP5JqY2AQbDwI0PlG6";
   
   const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
