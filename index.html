@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic AM Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-image: url('https://files.catbox.moe/728ll1.jpg'); 
+            --primary-blue: #00f3ff;
+            --dark-blue: #0a192f;
+            --glass-bg: rgba(10, 25, 47, 0.7);
+            --glass-border: rgba(0, 243, 255, 0.4);
+            --text-glow: 0 0 10px var(--primary-blue);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Rajdhani', sans-serif; }
+        body {
+            background-image: linear-gradient(rgba(0, 10, 30, 0.7), rgba(0, 10, 30, 0.8)), var(--bg-image);
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: white; display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; overflow: hidden; 
+        }
+        .app-container {
+            width: 100%; max-width: 400px; height: 100vh; max-height: 850px;
+            position: relative; background: var(--glass-bg);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border); box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+            overflow: hidden; display: flex; flex-direction: column;
+        }
+        #page1 {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px; z-index: 10; transition: all 0.5s ease;
+        }
+        .logo-container {
+            width: 250px; height: 250px; border-radius: 50%; border: 3px solid var(--primary-blue);
+            box-shadow: 0 0 20px var(--primary-blue), inset 0 0 20px var(--primary-blue);
+            margin-bottom: 50px; display: flex; justify-content: center; align-items: center;
+            overflow: hidden; animation: pulse-glow 2s infinite alternate;
+        }
+        .logo-container img { width: 100%; height: 100%; object-fit: cover; }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 10px var(--primary-blue); }
+            100% { box-shadow: 0 0 30px var(--primary-blue), inset 0 0 20px var(--primary-blue); }
+        }
+        .btn {
+            width: 80%; padding: 15px; margin: 10px 0; border: none; border-radius: 30px;
+            font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 700;
+            letter-spacing: 2px; cursor: pointer; transition: 0.3s; text-transform: uppercase;
+        }
+        .btn-start {
+            background: transparent; color: var(--primary-blue); border: 2px solid var(--primary-blue);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+        .btn-start:hover { background: var(--primary-blue); color: var(--dark-blue); box-shadow: 0 0 25px var(--primary-blue); }
+        .btn-owner {
+            background: linear-gradient(45deg, #0052ff, #00f3ff); color: white;
+            box-shadow: 0 0 15px rgba(0, 82, 255, 0.5);
+        }
+        .btn-owner:hover { box-shadow: 0 0 25px #00f3ff; }
+        .content-page {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; flex-direction: column; padding: 20px; padding-bottom: 90px; overflow-y: auto;
+        }
+        .welcome-header {
+            text-align: center; padding: 15px; background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px; border: 1px solid var(--glass-border); margin-bottom: 20px;
+            margin-top: 10px; font-family: 'Orbitron', sans-serif; font-size: 18px;
+            letter-spacing: 2px; text-shadow: var(--text-glow);
+        }
+        .anime-overlay {
+            width: 100%; height: 200px; border-radius: 15px; border: 2px solid var(--primary-blue);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); overflow: hidden; margin-bottom: 20px; background: #000;
+        }
+        .anime-overlay video { width: 100%; height: 100%; object-fit: cover; }
+        .btn-music {
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(90deg, rgba(0, 243, 255, 0.2), rgba(0, 82, 255, 0.6));
+            border: 1px solid var(--primary-blue); padding: 15px; border-radius: 15px;
+            color: white; font-size: 18px; font-weight: bold; cursor: pointer; margin-bottom: 20px; transition: 0.3s;
+        }
+        .btn-music:hover { background: linear-gradient(90deg, rgba(0, 82, 255, 0.6), rgba(0, 243, 255, 0.2)); box-shadow: 0 0 15px var(--primary-blue); }
+        .premium-card {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
+            border-radius: 15px; padding: 30px 20px; text-align: center;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .crown-icon {
+            width: 60px; height: 60px; background: var(--primary-blue); border-radius: 15px;
+            display: flex; justify-content: center; align-items: center; font-size: 30px;
+            box-shadow: 0 0 20px var(--primary-blue); margin-bottom: 15px;
+        }
+        .premium-title { font-family: 'Orbitron', sans-serif; color: var(--primary-blue); font-size: 22px; margin-bottom: 10px; text-shadow: var(--text-glow); }
+        .premium-desc { color: #ccc; font-size: 14px; }
+        
+        .activation-form {
+            background: rgba(0, 82, 255, 0.2); border: 1px solid var(--primary-blue);
+            border-radius: 20px; padding: 25px; text-align: center; box-shadow: inset 0 0 20px rgba(0, 243, 255, 0.1);
+        }
+        .activation-title { font-family: 'Orbitron', sans-serif; font-size: 16px; margin-bottom: 20px; line-height: 1.4; color: var(--primary-blue); }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .input-group input {
+            width: 100%; padding: 15px; border-radius: 10px; border: none;
+            background: rgba(255, 255, 255, 0.9); color: var(--dark-blue);
+            font-weight: bold; font-size: 16px; outline: none; transition: 0.3s;
+        }
+        .input-group input:focus { box-shadow: 0 0 15px var(--primary-blue); }
+        
+        .btn-submit {
+            width: 100%; padding: 15px; border-radius: 10px; border: none;
+            background: var(--primary-blue); color: var(--dark-blue);
+            font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 16px;
+            cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; margin-bottom: 10px;
+        }
+        .btn-submit:hover { background: #fff; box-shadow: 0 0 20px var(--primary-blue); }
+        .btn-submit:disabled { background: #888; cursor: not-allowed; }
+        
+        .btn-secondary {
+            width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--primary-blue);
+            background: transparent; color: var(--primary-blue);
+            font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 14px;
+            cursor: pointer; transition: 0.3s; margin-top: 10px;
+        }
+        .btn-secondary:hover { background: rgba(0, 243, 255, 0.1); }
+
+        .success-msg {
+            display: none; background: rgba(0, 255, 0, 0.1); border: 1px solid #00ff00; 
+            color: #00ff00; padding: 15px; border-radius: 10px; margin-bottom: 20px;
+            font-weight: 600; line-height: 1.4; font-size: 14px;
+        }
+
+        .bottom-nav {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: rgba(10, 25, 47, 0.95); backdrop-filter: blur(10px);
+            border-top: 1px solid var(--glass-border); display: none; 
+            justify-content: space-around; align-items: center; z-index: 20;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: #6c798c; cursor: pointer; transition: 0.3s; width: 50%; height: 100%;
+        }
+        .nav-item.active { color: var(--primary-blue); text-shadow: var(--text-glow); }
+        .nav-item span { font-size: 12px; font-weight: 600; letter-spacing: 1px; }
+        .active-page { display: flex !important; animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .spinner {
+            display: none; width: 20px; height: 20px; border: 3px solid rgba(0,0,0,0.3);
+            border-radius: 50%; border-top-color: var(--dark-blue);
+            animation: spin 1s ease-in-out infinite; margin-left: 10px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <audio id="bgMusic" src="https://files.catbox.moe/pb7krq.m4a" loop></audio>
+    <div class="app-container">
+        <div id="page1" class="active-page">
+            <div class="logo-container">
+                <img src="https://files.catbox.moe/o9z858.jpg" alt="Logo">
+            </div>
+            <button class="btn btn-start" onclick="startApp()">START</button>
+            <button class="btn btn-owner" onclick="window.open('https://whatsapp.com/channel/0029VbD2uqPEFeXryXtunc3z', '_blank')">CHANNEL OWNER</button>
+        </div>
+        <div id="page2" class="content-page">
+            <div class="welcome-header">WELCOME BUYER ALL</div>
+            <div class="anime-overlay">
+                <video autoplay loop muted playsinline>
+                    <source src="https://files.catbox.moe/60pd7k.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="btn-music" onclick="toggleMusic()">🎵 LAGU LATAR</div>
+            <div class="premium-card">
+                <div class="crown-icon">👑</div>
+                <div class="premium-title">ALIGHT PREMIUM</div>
+                <div class="premium-desc">adalah fitur utama</div>
+            </div>
+        </div>
+        
+        <div id="page3" class="content-page">
+            <div class="welcome-header">AKTIVASI</div>
+            <div class="anime-overlay">
+                <video autoplay loop muted playsinline>
+                    <source src="https://files.catbox.moe/60pd7k.mp4" type="video/mp4">
+                </video>
+            </div>
+            
+            <div class="activation-form">
+                <div class="activation-title">Verifikasi EMAIL<br>DAN MENIMATI PREMIUM 1 TAHUN</div>
+                
+                <div id="successBox" class="success-msg">
+                    ✅ Link verifikasi sudah dikirim ke email kamu. Buka email, salin link verifikasinya, lalu tempel di bawah.
+                </div>
+
+                <div id="step1">
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" id="emailInput" placeholder="email@kamu.com">
+                    </div>
+                    <button class="btn-submit" id="btnSendEmail" onclick="sendEmailVerification()">
+                        <span id="textSend">KIRIM LINK</span>
+                        <div class="spinner" id="spinSend"></div>
+                    </button>
+                </div>
+
+                <div id="step2" style="display: none;">
+                    <div class="input-group">
+                        <label>Link Verifikasi (Dari Email)</label>
+                        <input type="url" id="linkInput" placeholder="Tempel link dari email di sini...">
+                    </div>
+                    <button class="btn-submit" id="btnVerify" onclick="verifyLink()">
+                        <span id="textVerify">VERIFIKASI</span>
+                        <div class="spinner" id="spinVerify"></div>
+                    </button>
+                    
+                    <button class="btn-secondary" onclick="resendEmail()">Kirim Ulang Email</button>
+                    <button class="btn-secondary" onclick="resetForm()" style="border:none;">← Ganti Email</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bottom-nav" id="bottomNav">
+            <div class="nav-item active" id="navHome" onclick="switchTab('home')">
+                <span style="font-size: 24px; margin-bottom: 2px;">🏠</span>
+                <span>UTAMA</span>
+            </div>
+            <div class="nav-item" id="navTools" onclick="switchTab('tools')">
+                <span style="font-size: 24px; margin-bottom: 2px;">🛠️</span>
+                <span>TOOLS</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_KEY = "sylva-03d177598bf80a2482419e2d7772e6a3"; 
+        
+        const bgMusic = document.getElementById('bgMusic');
+        let isMusicPlaying = false;
+        let savedEmail = ""; 
+
+        function startApp() {
+            document.getElementById('page1').classList.remove('active-page');
+            document.getElementById('page1').style.display = 'none';
+            document.getElementById('page2').classList.add('active-page');
+            document.getElementById('page2').style.display = 'flex';
+            document.getElementById('bottomNav').style.display = 'flex';
+            bgMusic.play().then(() => { isMusicPlaying = true; }).catch(err => console.log("Audio error:", err));
+        }
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause(); isMusicPlaying = false;
+                document.querySelector('.btn-music').innerHTML = "🔇 MUSIK MATI";
+            } else {
+                bgMusic.play(); isMusicPlaying = true;
+                document.querySelector('.btn-music').innerHTML = "🎵 LAGU LATAR";
+            }
+        }
+
+        function switchTab(tab) {
+            document.getElementById('page2').classList.remove('active-page');
+            document.getElementById('page2').style.display = 'none';
+            document.getElementById('navHome').classList.remove('active');
+            document.getElementById('page3').classList.remove('active-page');
+            document.getElementById('page3').style.display = 'none';
+            document.getElementById('navTools').classList.remove('active');
+            if (tab === 'home') {
+                document.getElementById('page2').classList.add('active-page');
+                document.getElementById('page2').style.display = 'flex';
+                document.getElementById('navHome').classList.add('active');
+            } else if (tab === 'tools') {
+                document.getElementById('page3').classList.add('active-page');
+                document.getElementById('page3').style.display = 'flex';
+                document.getElementById('navTools').classList.add('active');
+            }
+        }
+
+        async function sendEmailVerification() {
+            const email = document.getElementById('emailInput').value;
+            const btn = document.getElementById('btnSendEmail');
+            const text = document.getElementById('textSend');
+            const spinner = document.getElementById('spinSend');
+
+            if (!email) { alert("Harap masukkan alamat email Anda!"); return; }
+
+            savedEmail = email; 
+            btn.disabled = true;
+            text.innerText = "MEMPROSES...";
+            spinner.style.display = "inline-block";
+
+            try {
+                // URL DUMMY YANG VALID (Di-encode) AGAR SERVER MAU MENGIRIM EMAIL
+                const dummyUrl = encodeURIComponent("https://alight-creative.firebaseapp.com/__/auth/action");
+                const url = `/api/proxy?email=${encodeURIComponent(email)}&url=${dummyUrl}&options=verif&apikey=${API_KEY}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.status === true || data.success === true || data.status === "success" || data.code === 200) {
+                    document.getElementById('step1').style.display = 'none';
+                    document.getElementById('step2').style.display = 'block';
+                    document.getElementById('successBox').style.display = 'block';
+                    document.getElementById('successBox').innerHTML = `✅ Link verifikasi sudah dikirim ke <b>${email}</b>.<br>Buka email kamu, salin link verifikasinya, lalu tempel di bawah.`;
+                } else {
+                    alert("❌ Gagal: " + (data.message || data.msg || "Terjadi kesalahan pada server API."));
+                }
+            } catch (error) {
+                alert("⚠️ Terjadi kesalahan jaringan. Coba lagi nanti.");
+            } finally {
+                btn.disabled = false;
+                text.innerText = "KIRIM LINK";
+                spinner.style.display = "none";
+            }
+        }
+
+        async function verifyLink() {
+            const link = document.getElementById('linkInput').value;
+            const btn = document.getElementById('btnVerify');
+            const text = document.getElementById('textVerify');
+            const spinner = document.getElementById('spinVerify');
+
+            if (!link) { alert("Harap tempel link verifikasi dari email Anda!"); return; }
+
+            btn.disabled = true;
+            text.innerText = "MEMVERIFIKASI...";
+            spinner.style.display = "inline-block";
+
+            try {
+                const url = `/api/proxy?email=${encodeURIComponent(savedEmail)}&url=${encodeURIComponent(link)}&options=verif&apikey=${API_KEY}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.status === true || data.success === true || data.status === "success" || data.code === 200) {
+                    alert("✅ Berhasil! Akun Alight Motion Anda sekarang sudah Premium.");
+                    resetForm(); 
+                } else {
+                    alert("❌ Gagal Verifikasi: " + (data.message || data.msg || "Link tidak valid atau sudah kedaluwarsa."));
+                }
+            } catch (error) {
+                alert("⚠️ Terjadi kesalahan jaringan. Coba lagi nanti.");
+            } finally {
+                btn.disabled = false;
+                text.innerText = "VERIFIKASI";
+                spinner.style.display = "none";
+            }
+        }
+
+        function resendEmail() {
+            document.getElementById('step1').style.display = 'block';
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('successBox').style.display = 'none';
+            document.getElementById('emailInput').value = savedEmail; 
+        }
+
+        function resetForm() {
+            document.getElementById('emailInput').value = "";
+            document.getElementById('linkInput').value = "";
+            document.getElementById('step1').style.display = 'block';
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('successBox').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
